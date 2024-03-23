@@ -16,8 +16,6 @@ int main() {
     
     // std::cout << Card::Uno::showName(one) << "\n";
     UnoGame game {};
-    game.addPlayers();
-    game.displayPlayers();
-    game.readInstructioins();
+    game.beginGame();
     return 1;
 }

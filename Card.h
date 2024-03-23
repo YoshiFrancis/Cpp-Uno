@@ -43,7 +43,7 @@ namespace Card {
             maxTypes,
         };
         
-        std::uniform_int_distribution<int> color_distribution(0, maxColors-1);
+        std::uniform_int_distribution<int> color_distribution(0, maxColors-2);
         std::uniform_int_distribution<int> type_distribution(0, maxTypes-1);
 
         struct Card {
@@ -63,6 +63,7 @@ namespace Card {
 
             if (type == PLUS_FOUR) 
                 color = ALL;
+            
             
             return { type, color };
         }
