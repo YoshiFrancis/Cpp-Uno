@@ -34,7 +34,15 @@ public:
         bool more = true;
         while (more) {
             Player new_player = addPlayer(more);
-            m_players.push_back(new_player);
+            if (more) 
+                m_players.push_back(new_player);
+        }
+        
+    }
+
+    void displayPlayers() {
+        for (auto& player : m_players) {
+            std::cout << player.getUsername() << "\n";
         }
     }
 
