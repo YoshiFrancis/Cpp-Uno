@@ -30,6 +30,14 @@ public:
         : Player({}, 0, "Guest")
         { }
 
+    Player& operator= (const Player& player) {
+        if (this == &player) 
+            return *this;
+        m_username = player.getUsername();
+
+        return *this;
+    }
+
     int getCardCount() const { return m_totalCards; }
     std::string getUsername() const { return m_username; }
     int getWins() const { return m_wins; }
@@ -71,7 +79,7 @@ public:
 private:
     std::vector<UnoCard> m_cards {};
     int m_totalCards { 0 };
-    const std::string m_username;
+    std::string m_username;
     unsigned int m_wins { 0 };
 };
 

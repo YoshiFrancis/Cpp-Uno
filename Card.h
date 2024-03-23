@@ -9,8 +9,8 @@ namespace Card {
     namespace Uno {
         using types = std::vector<std::string>;
         using colors = std::vector<std::string>;
-        
-        std::random_device rd;
+
+        std::random_device rd; 
         std::mt19937 gen(rd());
         
 
