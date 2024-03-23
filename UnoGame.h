@@ -3,12 +3,14 @@
 #include "Card.h"
 #include "Player.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 
 /*
-1. start game
-2. ask for number of users and get them to enter in usernames
-3. add users to vector array
-4. read out instruction text to terminal 
+1. start game -- DONE
+2. ask for number of users and get them to enter in usernames -- DONE
+3. add users to vector array -- DONE
+4. read out instruction text to terminal  
 5. begin game by giving all players 5 cards (no set sized deck -- all cards will be random)
 6. loop through vector of players and tell them to play card or draw
 7. run game until one player has one card
@@ -37,7 +39,6 @@ public:
             if (more) 
                 m_players.push_back(new_player);
         }
-        
     }
 
     void displayPlayers() {
@@ -50,6 +51,13 @@ public:
         return Card::Uno::generateCard();
     } 
 
+    void readInstructioins() {
+        std::ifstream outf{ "introduction.txt", std::ios::in };
+        std::string introTxt {};
+        while (std::getline(outf, introTxt)) 
+            std::cout << introTxt << "\n";
+    }
+
 private:
     // would like to use move semantics in the future for better optimazation
     // I have uneccessary creating of Player classes several times unneedlessly
@@ -58,6 +66,7 @@ private:
         while (answer != 'n' && answer != 'y') {
             std::cout << "Would a player like to join (y/n): ";
             std::cin >> answer;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             if (answer == 'n') {
                 more = false;
                 return {};
@@ -73,7 +82,6 @@ private:
                 std::cout << "Enter in y or n\n";
             }
         }
-
         return {};
 
     }

@@ -1,0 +1,3 @@
+Hello and welcome to Francis's wonderful UNO game!!! The order of players shall depend on the order on which they joined.
+There is no fixed deck, so you cannot count any cards since all draws will be randomized! A winner shall be declared once they have
+gained a hand of 0 cards. Let the best player win!!!

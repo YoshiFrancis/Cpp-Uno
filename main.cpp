@@ -18,5 +18,6 @@ int main() {
     UnoGame game {};
     game.addPlayers();
     game.displayPlayers();
+    game.readInstructioins();
     return 1;
 }
