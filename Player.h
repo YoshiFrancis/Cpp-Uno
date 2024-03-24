@@ -62,11 +62,10 @@ public:
             std::getline(std::cin, answer);
             card = Card::Uno::generateCard(answer, valid);
         }
-        return {};
-        // if (playCard(card)) 
-        //     return card;
-        // else 
-        //     return this->prompt(prompt);
+        if (playCard(card)) 
+            return card;
+        else 
+            return this->prompt(prompt);
         
     }
 
