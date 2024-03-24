@@ -52,16 +52,18 @@ public:
         }
     }
 
+    // for a websocket version, most likely would make the player the parameter and let the client side handle the generation
+    // of the player card. The player would do all the error checking still
     UnoCard prompt(std::string& prompt) {
-
         bool valid = false;
         std::string answer {};
         UnoCard card;
         while (!valid) {
-            std::cout << prompt << "\n";
+            std::cout << prompt;
             std::getline(std::cin, answer);
             card = Card::Uno::generateCard(answer, valid);
         }
+        // if not valid card (player doesn't have it), recurse until player enters card they have
         if (playCard(card)) 
             return card;
         else 
@@ -104,6 +106,5 @@ private:
     std::string m_username;
     unsigned int m_wins { 0 };
 };
-
 
 #endif

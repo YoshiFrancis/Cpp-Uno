@@ -59,28 +59,30 @@ public:
     }
 
     void displayTopCard() {
-        Card::Uno::showName(m_prevCard);
+        std::cout << "The card on the top of the deck: " << Card::Uno::showName(m_prevCard) << "\n";
     }
+
 
     void beginGame() {
         addPlayers();
         readInstructionsTxt();
         readBeginGameTxt();
+
+        // playing the actual game now  with all the rounds and moves by players
+        play();
+    }
+
+    // these names are terrible
+    // this function draws all the initial cards for the players and also draws the top card
+    void restartGame() {
         std::cout << "\n\n\n\n";
         for (auto& player : m_players) 
             givePlayerCards(player, drawCards(baseAmount));
         m_prevCard = drawCard();
         displayTopCard();
-
-        // playing the actual game now with all the rounds and moves by players
-        while (true) {
-            for (auto& player: m_players) {
-                UnoCard playedCard = askPlayer(player);
-                m_prevCard = playedCard;
-                displayTopCard();
-            }
-        }
     }
+
+    
 
     UnoCard askPlayer(Player& player) {
         std::string prompt;
@@ -165,11 +167,60 @@ private:
         }
     }
 
+    // loops through the players and asks for input
+    // also holds the functionality of asking if players want to play again -- will most likely move to another function
+    void runGame() {
+        Player* winner = nullptr;
+        while (winner == nullptr) {
+            for (auto& player: m_players) {
+                UnoCard playedCard = askPlayer(player);
+                if (player.getCardCount() == 0) {
+                    player.win();
+                    winner = &player;
+                    break;
+                }
+                m_prevCard = playedCard;
+                displayTopCard();
+            }
+        }
+    }
+
+    void play() {
+        while (true) {
+            restartGame();
+            runGame();
+            if (!askToPlayAgain()) 
+                break;
+        }
+    }
+        
+        
+
+    bool askToPlayAgain() {
+        // all just to check if they want to play again or not
+        // when I get to networking, I will have to see how to duplex this stuff.
+        char answer {};
+        while (answer != 'n' && answer != 'y') {
+            std::cout << "Would you like to play again (y/n): ";
+            std::cin >> answer;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if (answer == 'n') {
+                std::cout << "Thank you for playing!\n";
+                return false;
+            } else if (answer == 'y') {
+                return true;
+            } else {
+                std::cout << "Enter in y or n\n";
+            }
+        }
+        return false;
+    }
+    
     std::vector<Player> m_players;
     UnoCard m_prevCard {};
     unsigned int m_currPlayer { 0 };
     int m_moves { 0 };
-    const int baseAmount = 5;
+    const int baseAmount = 2;
     
 
 };

@@ -74,7 +74,6 @@ namespace Card {
             std::string type = cardStr.substr(delimiterPos + delimiter.size(), cardStr.find('\n'));
             Helper::capitalizeOnly(color);
             Helper::capitalizeOnly(type);
-            std::cout << color << "\n" << type << "\n";
 
             // validation that is card while also getting the specifc volotd
             int color_idx, type_idx;
@@ -95,10 +94,7 @@ namespace Card {
                 valid = false;
                 return {};
             }
-            std::cout << "card is valid?\n";
-
             valid = true;
-
             return { static_cast<CardType>(type_idx), static_cast<CardColor>(color_idx) };
         }
     }
