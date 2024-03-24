@@ -14,11 +14,11 @@ using cardsVec = std::vector<UnoCard>;
 class Player {
 public:
 
-    Player(std::vector<UnoCard> cards, int totalCards, std::string username) 
+    Player(cardsVec cards, int totalCards, std::string username) 
         : m_cards { cards }, m_totalCards { totalCards }, m_username { username } 
         { }
     
-    Player(std::vector<UnoCard> cards, std::string username) 
+    Player(cardsVec cards, std::string username) 
         : Player(cards, cards.size(), username)
         { }
 
@@ -42,9 +42,32 @@ public:
     std::string getUsername() const { return m_username; }
     int getWins() const { return m_wins; }
 
-    void acceptCards(std::vector<UnoCard> cards, int totalCards) {
-        m_cards = cards;
-        m_totalCards = totalCards;
+    void acceptCards(cardsVec cards, int totalCards) {
+        if (m_totalCards != 0) {
+            m_cards.insert(m_cards.end(), cards.begin(), cards.end());
+            m_totalCards += totalCards;
+        } else {
+            m_cards = cards;
+            m_totalCards = totalCards;
+        }
+    }
+
+    UnoCard prompt(std::string& prompt) {
+
+        bool valid = false;
+        std::string answer {};
+        UnoCard card;
+        while (!valid) {
+            std::cout << prompt << "\n";
+            std::getline(std::cin, answer);
+            card = Card::Uno::generateCard(answer, valid);
+        }
+        return {};
+        // if (playCard(card)) 
+        //     return card;
+        // else 
+        //     return this->prompt(prompt);
+        
     }
 
     void drawCard(UnoCard card) {
@@ -59,7 +82,7 @@ public:
     }
 
     bool playCard(const UnoCard &playCard) {
-        for (std::vector<UnoCard>::iterator iter = m_cards.begin(); iter != m_cards.end(); ++iter) {
+        for (cardsVec::iterator iter = m_cards.begin(); iter != m_cards.end(); ++iter) {
             if (iter->type == playCard.type) {
                 m_cards.erase(iter);
                 --m_totalCards;
@@ -77,7 +100,7 @@ public:
     }
 
 private:
-    std::vector<UnoCard> m_cards {};
+    cardsVec m_cards {};
     int m_totalCards { 0 };
     std::string m_username;
     unsigned int m_wins { 0 };

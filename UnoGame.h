@@ -4,7 +4,9 @@
 #include "Player.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
+
 
 /*
 I have implemented the game so that the UnoGame class draws for the players. The players have the functionality to receive the cards.
@@ -16,7 +18,7 @@ TODO
 2. ask for number of users and get them to enter in usernames -- DONE
 3. add users to vector array -- DONE
 4. read out instruction text to terminal  -- DONE
-5. begin game by giving all players 5 cards (no set sized deck -- all cards will be random)
+5. begin game by giving all players 5 cards (no set sized deck -- all cards will be random) -- DONE
 6. loop through vector of players and tell them to play card or draw
 7. run game until one player has one card
 8. ask if players would like to play again
@@ -31,6 +33,10 @@ public:
         { }
     UnoGame()=default;
     
+    UnoCard getTopCard() {
+        return m_prevCard;
+    }
+
     void addPlayers(std::initializer_list<Player> players) {
         for (auto& player : players) {
             m_players.push_back(player);
@@ -52,6 +58,10 @@ public:
         }
     }
 
+    void displayTopCard() {
+        Card::Uno::showName(m_prevCard);
+    }
+
     void beginGame() {
         addPlayers();
         readInstructionsTxt();
@@ -59,19 +69,30 @@ public:
         std::cout << "\n\n\n\n";
         for (auto& player : m_players) 
             givePlayerCards(player, drawCards(baseAmount));
-        displayAllCards();
+        m_prevCard = drawCard();
+        displayTopCard();
+
+        // playing the actual game now with all the rounds and moves by players
+        while (true) {
+            for (auto& player: m_players) {
+                UnoCard playedCard = askPlayer(player);
+                m_prevCard = playedCard;
+                displayTopCard();
+            }
+        }
+    }
+
+    UnoCard askPlayer(Player& player) {
+        std::string prompt;
+        std::ostringstream os;
+        os << player.getUsername() << ", enter the card you would like to place down <COLOR>,<TYPE>: ";
+        prompt = os.str();
+        player.displayCards();
+        return player.prompt(prompt);
     }
 
     void givePlayerCards(Player& player, cardsVec cards) {
         player.acceptCards(cards, cards.size());
-    }
-
-    void displayAllCards() {
-        for (auto& player : m_players) {
-            std::cout << player.getUsername() << ":\n";
-            player.displayCards();
-            std::cout << "\n";
-        }
     }
 
 private:
@@ -135,6 +156,14 @@ private:
     UnoCard drawCard() {
         return Card::Uno::generateCard();
     } 
+
+    void displayAllCards() {
+        for (auto& player : m_players) {
+            std::cout << player.getUsername() << ":\n";
+            player.displayCards();
+            std::cout << "\n";
+        }
+    }
 
     std::vector<Player> m_players;
     UnoCard m_prevCard {};
